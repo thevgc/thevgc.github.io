@@ -3,10 +3,10 @@
     <div>
       <app-logo/>
       <h1 class="title">
-        vgc-frontend
+        VGC
       </h1>
       <h2 class="subtitle">
-        The Virtual Gaming Community frontend web application.
+        Virtual Gaming Community
       </h2>
       <div class="links">
         <a
