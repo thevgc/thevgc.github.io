@@ -31,6 +31,7 @@ module.exports = {
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ]
   },
+  css: ["@/assets/css/bootstrap.scss"],
   modules: [
     // Simple usage
     ["bootstrap-vue/nuxt", {

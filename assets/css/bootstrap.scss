@@ -1,0 +1,16 @@
+@import "assets/css/bootstrap/functions";
+@import "assets/css/variables";
+@import "assets/css/bootstrap/mixins";
+// @import "./bootstrap/reboot";
+// Bootstrap and its default variables
+@import "assets/css/bootstrap/bootstrap";
+
+html, body {
+    min-height: 100%;
+    min-height: 100vh;
+    max-width: 100%;
+    overflow-x: hidden;
+}
+// body {
+//     overflow: hidden;
+// }
