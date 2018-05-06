@@ -79,8 +79,21 @@ module.exports = {
       }
     ]
   ],
-  loading: { color: '#3B8070' },
+  loading: {
+    color: '#3B8070'
+  },
   build: {
+    analyze: {
+      analyzerMode: 'static'
+    },
+    extractCSS: true,
+    filenames: {
+      css: 'common.[contenthash].css',
+      manifest: 'manifest.[hash].js',
+      vendor: 'common.[chunkhash].js',
+      app: 'app.[chunkhash].js',
+      chunk: '[name].[chunkhash].js'
+    },
     extend (config, { isDev, isClient }) {
       if (isDev && isClient) {
         config.module.rules.push({

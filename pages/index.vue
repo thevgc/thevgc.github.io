@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import AppLogo from '~/components/AppLogo.vue'
+const AppLogo = () => import('~/components/AppLogo.vue')
 
 export default {
   head () {

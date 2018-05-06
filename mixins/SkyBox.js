@@ -1,3 +1,5 @@
+'use strict';
+
 import {} from "three";
 // import Stars from "~/static/data/star-data.json";
 export default {
@@ -5,12 +7,17 @@ export default {
     return {
       starData: {},
       starfield: [
-        "/images/starfield/front.png",
-        "/images/starfield/back.png",
-        "/images/starfield/left.png",
-        "/images/starfield/right.png",
-        "/images/starfield/top.png",
-        "/images/starfield/bottom.png"
+        require("@/assets/images/starfield/front.png"),
+        require("@/assets/images/starfield/back.png"),
+
+        require("@/assets/images/starfield/left.png"),
+
+        require("@/assets/images/starfield/right.png"),
+
+        require("@/assets/images/starfield/top.png"),
+
+        require("@/assets/images/starfield/bottom.png")
+
       ],
       starTextures: [],
     };

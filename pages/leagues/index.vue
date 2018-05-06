@@ -1,9 +1,13 @@
 <template>
-  <h1>Leagues</h1>
+  <div class="container">
+    <h1>Leagues</h1>
+    <animation></animation>
+  </div>
 </template>
 
 <script>
-import Animation from '@/components/WebGL'
+const Animation = () => import('@/components/WebGL')
+
 export default {
   layout: 'app',
   head () {
@@ -17,9 +21,9 @@ export default {
       ]
     }
   },
-    components: {
-        Animation
-    },
+  components: {
+    Animation
+  },
   mounted () {
     // this.$el.style.backgroundColor = '#1d1d1d'
   }

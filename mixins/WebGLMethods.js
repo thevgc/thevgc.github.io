@@ -386,7 +386,7 @@ export default {
     },
     createTexture() {
       let loader = new TextureLoader();
-      let texture = loader.load("/images/terrain/grasslight-big.jpg");
+      let texture = loader.load(require("@/assets/images/terrain/grasslight-big.jpg"));
       let maxAnisotropy = this.renderer.capabilities.getMaxAnisotropy();
       let material = new MeshPhongMaterial({ color: 0xffffff, map: texture });
 
