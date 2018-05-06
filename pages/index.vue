@@ -10,11 +10,9 @@
       <div class="links">
         <a
           href="#"
-          target="_blank"
           class="button--green">Login</a>
         <a
           href="#"
-          target="_blank"
           class="button--grey">Register</a>
       </div>
     </div>

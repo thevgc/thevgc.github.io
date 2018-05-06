@@ -15,8 +15,13 @@
   </div>
 </template>
 <script>
+import { AnimationBus } from '@/helpers/animation-bus.js'
+
 export default {
-  name: 'app-navigation'
+  name: 'app-navigation',
+  mounted() {
+    AnimationBus.$emit('add-to-scene', 'From Navigation')
+  }
 }
 </script>
 <style lang="scss">
@@ -34,10 +39,10 @@ body {
   background-color: rgba($gray-400, 0.25);
   nav {
     background: linear-gradient(
-      to bottom, 
-      rgba(0,0,0,0.7), 
-      rgba(0,0,0,0.3), 
-      rgba(0,0,0,0.3), 
+      to bottom,
+      rgba(0,0,0,0.7),
+      rgba(0,0,0,0.3),
+      rgba(0,0,0,0.3),
       rgba(0,0,0,0.7)
     );
     li {
@@ -52,7 +57,7 @@ body {
         padding: $navbar-nav-link-padding-y $navbar-nav-item-padding-x;
         color: $gray-100;
         &.active {
-          transform: translateX(-3px) scale(1.2); 
+          transform: translateX(-3px) scale(1.2);
         }
       }
       &:hover {

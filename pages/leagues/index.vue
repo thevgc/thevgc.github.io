@@ -3,6 +3,7 @@
 </template>
 
 <script>
+import Animation from '@/components/WebGL'
 export default {
   layout: 'app',
   head () {
@@ -16,6 +17,9 @@ export default {
       ]
     }
   },
+    components: {
+        Animation
+    },
   mounted () {
     // this.$el.style.backgroundColor = '#1d1d1d'
   }

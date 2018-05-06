@@ -34,19 +34,19 @@ export default {
   computed: {
       ...mapState({
         camera: state => state.three.camera,
-        renderer: state => state.three.renderer,
+        // renderer: state => state.three.renderer,
         scene: state => state.three.scene
       })
   },
   mounted () {
     this.loader = new TextureLoader();
     this.height = window.innerHeight;
-    this.createRenderer({ antialias: true, alpha: true, clearColor: 0xFFFFFF, clearAlpha: 1 })
-    this.rendererSetSize({ x: window.innerWidth, y: window.innerHeight });
+    // this.createRenderer({ antialias: true, alpha: true, clearColor: 0xFFFFFF, clearAlpha: 1 })
+    // this.rendererSetSize({ x: window.innerWidth, y: window.innerHeight });
     this.createCamera( 45, window.innerWidth / window.innerHeight, 0.1, 2000)
     this.createScene();
-    this.createSkydome();
-    this.animateRenderer();
+    // this.createSkydome();
+    // this.animateRenderer();
   },
   methods: {
     ...mapMutations({
@@ -69,7 +69,7 @@ export default {
       let scope = this;
       this.loader.load(require('@/assets/images/skydome.jpg'), function(texture) {
         texture.wrapS = texture.wrapT = RepeatWrapping;
-        let geometry = new SphereGeometry(2000 * 0.95, 32, 16, 0, Math.PI * 2.0, 0, Math.PI / 2.0
+        let geometry = new SphereGeometry(20000 * 0.95, 32, 16, 0, Math.PI * 2.0, 0, Math.PI / 2.0
     ).rotateX(Math.PI / 2.0).rotateZ(Math.PI)
         let material = new MeshBasicMaterial({
           color: 0xFFFFFF, side: BackSide, map: texture, fog: false
@@ -77,6 +77,7 @@ export default {
         let mesh = new Mesh(
           geometry, material
         )
+        console.log(mesh)
         scope.addMeshToScene(mesh);
       })
     }
