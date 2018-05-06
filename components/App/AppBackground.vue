@@ -3,7 +3,7 @@
     </div>
 </template>
 <script>
-import { Color, PerspectiveCamera, Scene, Vector3, WebGLRenderer } from 'three'
+import { AmbientLight, Color, DirectionalLight, Geometry, Line, LineBasicMaterial, Mesh, PerspectiveCamera, Scene, Vector3, WebGLRenderer } from 'three'
 import { mapState } from 'vuex'
 import { AnimationBus } from '@/helpers/animation-bus.js'
 const defaults = {
@@ -70,6 +70,21 @@ export default {
     computed: {
     },
     methods: {
+        addAmbient(color) {
+            this.scene.add(new AmbientLight(color));
+        },
+
+      createLine() {
+        let material = new LineBasicMaterial( { color: 0xFFFFFF } ),
+            geometry = new Geometry(),
+            line = new Line( geometry, material );
+
+        geometry.vertices.push(new Vector3( -10, 0, 0) );
+        geometry.vertices.push(new Vector3( 0, 10, 0) );
+        geometry.vertices.push(new Vector3( 10, 0, 0) );
+        this.scene.add(line)
+        console.log('Line added')
+      },
       detectWebGL() {
         try {
           const canvas = document.createElement('canvas')
@@ -82,12 +97,11 @@ export default {
         }
       },
       animate() {
-        requestAnimationFrame( this.animate );
         // this.box.mesh.rotation.x += 0.1
         // this.box.mesh.rotation.y += 0.1
-        if(this.renderer) {
-          this.renderer.render( this.scene, this.camera );
-        }
+        this.renderer.render( this.scene, this.camera );
+        requestAnimationFrame( this.animate );
+
       },
       loadAssets() {
 
@@ -114,30 +128,35 @@ export default {
       }
     },
     mounted () {
-      this.setDimensions(() => {
+      this.setDimensions();
         /* Create Scene */
         let scene = new Scene();
-        scene.name = 'master';
         this.scene = scene;
 
         /* Create Perspective Camera */
-        let camera = new PerspectiveCamera(45, this.width / this.height, 0.1, VIEW_DEPTH);
-        camera.name = 'master'
-        this.camera = camera
+        let camera = new PerspectiveCamera(45, this.width / this.height, 1, VIEW_DEPTH);
+        camera.position.set(0,0,100);
+        camera.lookAt(new Vector3(0,0,0));
+        this.camera = camera;
 
         /* Create WebGL Renderer */
-        let renderer = new WebGLRenderer({ antialias: true, alpha: true, clearColor: 0xFFFFFF, clearAlpha: 1 });
-        renderer.setSize(this.width, this.height)
+        let renderer = new WebGLRenderer();
+        renderer.setSize(this.width, this.height);
         this.renderer = renderer;
 
-        /* Attach renderer to container */
-        this.$el.appendChild(this.renderer.domElement)
 
         /* Start Animating */
-        this.animate()
 
         this.addListeners();
-      });
+        this.createLine();
+        this.addAmbient(0xeef0ff)
+        var light = new DirectionalLight( 0xffffff, 1 );
+        /* Attach renderer to container */
+        light.position.set( 1, 1, 1 );
+        this.scene.add( light );        // this.createGlobe();
+        this.$el.appendChild(this.renderer.domElement)
+        this.renderer.render(this.scene, this.camera)
+        this.animate()
     }
 }
 </script>
