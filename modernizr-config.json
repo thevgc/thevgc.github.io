@@ -1,0 +1,14 @@
+{
+  "minify": true,
+  "options": [
+    "addTest",
+    "mq",
+    "setClasses"
+  ],
+  "feature-detects": [
+    "test/geolocation",
+    "test/webgl",
+    "test/event/deviceorientation-motion",
+    "test/webgl/extensions"
+  ]
+}

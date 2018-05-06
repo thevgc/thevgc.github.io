@@ -1,9 +1,6 @@
 'use strict';
 
 module.exports = {
-  /*
-  ** Headers of the page
-  */
   head: {
     title: 'The VGC',
     meta: [{
@@ -31,39 +28,59 @@ module.exports = {
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ]
   },
+  auth: {
+    redirect: {
+      callback: '/callback'
+    },
+    strategies: {
+      local: {
+        endpoints: {
+          login: {
+            propertyName: 'token.accessToken'
+          }
+        }
+      },
+      auth0: {
+        domain: 'nuxt-auth.auth0.com',
+        client_id: 'q8lDHfBLJ-Fsziu7bf351OcYQAIe3UJv'
+      },
+      facebook: {
+        client_id: '225940131320984',
+        userinfo_endpoint: 'https://graph.facebook.com/v2.12/me?fields=about,name,picture{url},email,birthday',
+        scope: ['public_profile', 'email', 'user_birthday']
+      },
+      google: {
+        client_id: '956748748298-kr2t08kdbjq3ke18m3vkl6k843mra1cg.apps.googleusercontent.com'
+      },
+      github: {
+        client_id: process.env.GITHUB_CLIENT_ID,
+        client_secret: process.env.GITHUB_CLIENT_SECRET
+      },
+      twitter: {
+        client_id: 'FAJNuxjMTicff6ciDKLiZ4t0D'
+      }
+    }
+  },
   css: ["@/assets/css/bootstrap.scss"],
   modules: [
-    // Simple usage
     ["bootstrap-vue/nuxt", {
       css: false
     }],
     "@nuxtjs/font-awesome",
     "@nuxtjs/axios",
-    // "~/modules/modernizr",
-    // "~/modules/gsap",
-    // "~/modules/jquery",
-    // "~/modules/lodash",
-    // With options
+    '@nuxtjs/auth',
+    "~/modules/jquery",
+    "~/modules/lodash",
     [
       "nuxt-facebook-pixel-module",
       {
-        /* module options */
         track: "PageView",
         pixelId: "2179837682251381"
       }
     ]
   ],
-  /*
-  ** Customize the progress bar color
-  */
   loading: { color: '#3B8070' },
-  /*
-  ** Build configuration
-  */
   build: {
-    /*
-    ** Run ESLint on save
-    */
     extend (config, { isDev, isClient }) {
       if (isDev && isClient) {
         config.module.rules.push({

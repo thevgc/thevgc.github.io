@@ -1,7 +1,6 @@
 <template>
   <section class="container">
     <div>
-      <app-logo/>
       <h1 class="title">
         VGC
       </h1>
@@ -10,13 +9,13 @@
       </h2>
       <div class="links">
         <a
-          href="https://nuxtjs.org/"
+          href="#"
           target="_blank"
-          class="button--green">Documentation</a>
+          class="button--green">Login</a>
         <a
-          href="https://github.com/nuxt/nuxt.js"
+          href="#"
           target="_blank"
-          class="button--grey">GitHub</a>
+          class="button--grey">Register</a>
       </div>
     </div>
   </section>
@@ -26,15 +25,26 @@
 import AppLogo from '~/components/AppLogo.vue'
 
 export default {
+  head () {
+    return {
+      title: 'Welcome to The Virtual Gaming Community',
+      meta: [
+        {
+          name: 'viewport',
+          content: 'width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no'
+        }
+      ]
+    }
+  },
   components: {
     AppLogo
   }
 }
 </script>
 
-<style>
+<style lang="scss">
 .container {
-  min-height: 100vh;
+  min-height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;

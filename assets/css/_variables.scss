@@ -10,7 +10,7 @@
 @import "assets/css/bootstrap/functions";
 @import "assets/css/narkism";
 
-$app-background: #1d1d1d;
+$app-background: transparent;
 
 
 // stylelint-disable
@@ -146,8 +146,8 @@ $sizes: map-merge((
 //
 // Settings for the `<body>` element.
 
-$body-bg:                   $gray-900;
-$body-color:                $gray-100;
+$body-bg:                   $gray-100;
+$body-color:                $gray-900;
 
 // Links
 //
