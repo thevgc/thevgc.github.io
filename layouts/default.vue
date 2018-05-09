@@ -16,7 +16,14 @@ const AppDrawer = () => import('@/components/App/AppDrawer')
 const AppStage = () => import('@/components/App/AppStage')
 const AppNavigation = () => import("./../components/App/AppNavigation.vue");
 import { mapGetters, mapActions, mapMutations, mapState } from "vuex"
-import {BackSide,SphereGeometry,MeshBasicMaterial,Mesh,TextureLoader,RepeatWrapping} from 'three'
+import {
+  BackSide,
+  SphereGeometry,
+  MeshBasicMaterial,
+  Mesh,
+  TextureLoader,
+  RepeatWrapping
+} from 'three'
 export default {
   components: {
     AppBackground,

@@ -1,3 +1,5 @@
+'use strict';
+
 export default {
     setToken(token) {
         window.localStorage.setItem("jwt_token", token);

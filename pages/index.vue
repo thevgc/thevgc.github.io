@@ -20,7 +20,6 @@
 </template>
 
 <script>
-const AppLogo = () => import('~/components/AppLogo.vue')
 
 export default {
   head () {
@@ -33,9 +32,6 @@ export default {
         }
       ]
     }
-  },
-  components: {
-    AppLogo
   }
 }
 </script>
@@ -50,18 +46,18 @@ export default {
 }
 
 .title {
-  font-family: "Quicksand", "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; /* 1 */
+  // font-family: "Quicksand", "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; /* 1 */
   display: block;
   font-weight: 300;
   font-size: 100px;
-  color: #35495e;
+  color: #f6f6f6;
   letter-spacing: 1px;
 }
 
 .subtitle {
   font-weight: 300;
   font-size: 42px;
-  color: #526488;
+  color: #f6f6f6;
   word-spacing: 5px;
   padding-bottom: 15px;
 }

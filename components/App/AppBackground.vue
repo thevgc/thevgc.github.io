@@ -4,29 +4,20 @@
 </template>
 <script>
 import { AmbientLight, Color, DirectionalLight, Geometry, Line, LineBasicMaterial, Mesh, PerspectiveCamera, Scene, Vector3, WebGLRenderer } from 'three'
-import { mapState } from 'vuex'
-import { AnimationBus } from '@/helpers/animation-bus.js'
-const defaults = {
-  viewDepth: 2000,
-  maxTimestep: 67,
-  heightfieldSize: 3072,
-  heightfieldHeight: 180,
-  waterLevel: 55, // heightfieldHeight * 0.305556, // 55.0
-  beachTransitionLow: 0.31,
-  beachTransitionHigh: 0.36,
-  lightDir: new Vector3(.0, 1.0, -1.0).normalize(),
-  fogColor: new Color(0.74, 0.77, 0.91),
-  grassColor: new Color(0.45, 0.46, 0.19),
-  waterColor: new Color(0.6, 0.7, 0.85),
-  windDefault: 1.5,
-  windMax: 3.0,
-  maxGlare: 0.25, // max glare effect amount
-  glareRange: 1.1, // angular range of effect
-  glareYaw: Math.PI * 1.5, // yaw angle when looking directly at sun
-  glarePitch: 0.2, // pitch angle looking at sun
-  glareColor: new Color(1.0, 0.8, 0.4),
-  introFadeDur: 2000
-}
+import { mapState } from 'vuex';
+import { AnimationBus } from '@/helpers/animation-bus.js';
+import { $e, $i, detectWebGL } from '@/helpers/util.js';
+import { Loader } from '@/helpers/loader';
+import browser from '@/helpers/browser';
+import CONFIGS from '@/helpers/configs';
+import * as logger from '@/helpers/logger';
+import * as input from '@/helpers/input';
+import * as heightfield from '@/helpers/heightfield'
+import { defaults } from '@/helpers/defaults';
+import {
+  Vec2,
+  Vec3
+} from '@/helpers/color';
 
 const VIEW_DEPTH = 2000.0
 const MAX_TIMESTEP = 67 // max 67 ms/frame
@@ -104,6 +95,36 @@ export default {
 
       },
       loadAssets() {
+        const loader = Loader()
+        loader.load(
+          {
+            text: [
+              {name: 'grass.vert', url: require('@/assets/shaders/grass.vert.glsl')},
+              {name: 'grass.frag', url: require('@/assets/shaders/grass.frag.glsl')},
+              {name: 'terrain.vert', url: require('@/assets/shaders/terrain.vert.glsl')},
+              {name: 'terrain.frag', url: require('@/assets/shaders/terrain.frag.glsl')},
+              {name: 'water.vert', url: require('@/assets/shaders/water.vert.glsl')},
+              {name: 'water.frag', url: require('@/assets/shaders/water.frag.glsl')}
+            ],
+            images: [
+              {name: 'heightmap', url: require('@/assets/data/heightmap.jpg')},
+              {name: 'noise', url: require('@/assets/data/noise.jpg')}
+            ],
+            textures: [
+              {name: 'grass', url: require('@/assets/data/grass.jpg')},
+              {name: 'terrain1', url: require('@/assets/data/terrain1.jpg')},
+              {name: 'terrain2', url: require('@/assets/data/terrain2.jpg')},
+              {name: 'skydome', url: require('@/assets/data/skydome.jpg')},
+              {name: 'skyenv', url: require('@/assets/data/skyenv.jpg')}
+            ]
+          }
+        )
+        this.assets = loader.getAssets();
+        // console.log(this.assets.getAssets())
+        // Select a config roughly based on device type
+		    const cfgId = browser.isMobile.any ? 'mobile' : 'desktop'
+		    const cfg = CONFIGS[cfgId]
+        console.log(cfg)
 
       },
       resize() {
@@ -157,6 +178,7 @@ export default {
         this.$el.appendChild(this.renderer.domElement)
         this.renderer.render(this.scene, this.camera)
         this.animate()
+        this.loadAssets()
     }
 }
 </script>
