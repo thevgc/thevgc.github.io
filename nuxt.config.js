@@ -7,8 +7,7 @@ module.exports = {
     htmlAttrs: {
       lang: 'en'
     },
-    meta: [
-      {
+    meta: [{
         charset: 'utf-8'
       },
       {
@@ -21,13 +20,11 @@ module.exports = {
         content: 'The frontend web app for The Virtual Gaming Community'
       }
     ],
-    link: [
-      {
-        rel: 'icon',
-        type: 'image/x-icon',
-        href: '/favicon.ico'
-      }
-    ]
+    link: [{
+      rel: 'icon',
+      type: 'image/x-icon',
+      href: '/favicon.ico'
+    }]
   },
   auth: {
     redirect: {
@@ -89,8 +86,7 @@ module.exports = {
     '~/modules/jquery',
     // '~/modules/typescript',
     // '~/modules/workbox',
-    '~/modules/lodash',
-    [
+    '~/modules/lodash', [
       'nuxt-facebook-pixel-module',
       {
         track: 'PageView',
@@ -133,8 +129,16 @@ module.exports = {
       app: 'app.[chunkhash].js',
       chunk: '[name].[chunkhash].js'
     },
-    extend(config, { isDev, isClient }) {
-      if(isClient) {
+    extend(config, {
+      isDev,
+      isClient
+    }) {
+      config.module.rules.push({
+        test: /\.(glsl)$/,
+        loader: 'file-loader',
+        exclude: /(node_modules)/
+      });
+      if (isClient) {
         config.devtool = 'source-map';
       }
       if (isDev && isClient) {
