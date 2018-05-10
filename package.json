@@ -6,6 +6,7 @@
   "private": true,
   "scripts": {
     "dev": "nuxt",
+    "dev-debug": "node --inspect node_modules/nuxt/bin/nuxt",
     "analyze": "nuxt build",
     "build": "nuxt build",
     "start": "nuxt start",

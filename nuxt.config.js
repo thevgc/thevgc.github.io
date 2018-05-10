@@ -134,6 +134,9 @@ module.exports = {
       chunk: '[name].[chunkhash].js'
     },
     extend(config, { isDev, isClient }) {
+      if(isClient) {
+        config.devtool = 'source-map';
+      }
       if (isDev && isClient) {
         config.module.rules.push({
           enforce: 'pre',
