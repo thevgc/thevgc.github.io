@@ -6,7 +6,7 @@ import {
 
 import {
   Vec3
-} from '@/helpers/color';
+} from '@/helpers/vec';
 
 
 ///////////////////////////////////////////////////////////
@@ -287,6 +287,15 @@ export function infoAt(hf, x, y, wrap, hi) {
   hi.z = getPlaneZ(n, hf.heights[ih], px, py);
 }
 
+// pre-allocated scratchpad object
+const _hi = {
+  i: 0,
+  t: 0,
+  z: 0.0,
+  n: Vec3.create()
+}
+
+
 /**
  * Get height (z) at x,y
  * @param wrap If true, x,y coords will be wrapped around if out of bounds,
@@ -296,4 +305,3 @@ export function heightAt(hf, x, y, wrap = false) {
   infoAt(hf, x, y, wrap, _hi);
   return _hi.z;
 }
-

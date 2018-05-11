@@ -6,11 +6,12 @@
   "camelcase": false,
   "eqeqeq": true,
   "indent": 2,
-  "latedef": true,
+  "latedef": false,
   "newcap": true,
   "quotmark": "single",
-  "strict": true,
+  "strict": false,
   "undef": false,
   "unused": false,
-  "eqnull": true
+  "eqnull": true,
+  "asi": false
 }

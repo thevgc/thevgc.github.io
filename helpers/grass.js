@@ -1,36 +1,24 @@
 'use strict';
 
-// Creates & animates a large patch of grass to fill the foreground.
-// One simple blade of grass mesh is repeated many times using instanced arrays.
-
-// Uses grass shaders (see: shader/grass.*.glsl)
-
 import {
   nrand
-} from '@/helpers/gmath';
+} from './gmath'
 import {
   Vec2,
   Vec3,
   Color
-} from '@/helpers/vec';
-import simplex from '@/helpers/simplex';
-import * as bufferset from '@/helpers/bufferset';
+} from './vec'
 import {
-  BufferAttribute,
-  InstancedBufferAttribute,
-  InstancedBufferGeometry,
-  Mesh,
-  RawShaderMaterial,
-  RepeatWrapping,
-  Sphere,
-  Vector3
-} from 'three';
-const BLADE_SEGS = 4; // # of blade segments
-const BLADE_VERTS = (BLADE_SEGS + 1) * 2; // # of vertices per blade (1 side)
-const BLADE_INDICES = BLADE_SEGS * 12;
-const BLADE_WIDTH = 0.15;
-const BLADE_HEIGHT_MIN = 2.25;
-const BLADE_HEIGHT_MAX = 3.0;
+  simplex
+} from './simplex'
+import * as bufferset from './bufferset'
+import * as THREE from 'three';
+const BLADE_SEGS = 4 // # of blade segments
+const BLADE_VERTS = (BLADE_SEGS + 1) * 2 // # of vertices per blade (1 side)
+const BLADE_INDICES = BLADE_SEGS * 12
+const BLADE_WIDTH = 0.15
+const BLADE_HEIGHT_MIN = 2.25
+const BLADE_HEIGHT_MAX = 3.0
 
 /**
  * Creates a patch of grass mesh.
@@ -47,33 +35,33 @@ export function createMesh(opts) {
     offset: new Float32Array(4 * opts.numBlades),
     // Indices for a blade
     index: new Uint16Array(BLADE_INDICES)
-  };
+  }
 
-  initBladeIndices(buffers.index, 0, BLADE_VERTS, 0);
-  initBladeOffsetVerts(buffers.offset, opts.numBlades, opts.radius);
-  initBladeShapeVerts(buffers.shape, opts.numBlades, buffers.offset);
-  initBladeIndexVerts(buffers.vindex);
+  initBladeIndices(buffers.index, 0, BLADE_VERTS, 0)
+  initBladeOffsetVerts(buffers.offset, opts.numBlades, opts.radius)
+  initBladeShapeVerts(buffers.shape, opts.numBlades, buffers.offset)
+  initBladeIndexVerts(buffers.vindex)
 
-  const geo = new InstancedBufferGeometry();
+  const geo = new THREE.InstancedBufferGeometry()
   // Because there are no position vertices, we must create our own bounding sphere.
   // (Not used because we disable frustum culling)
-  geo.boundingSphere = new Sphere(
-    new Vector3(0, 0, 0), Math.sqrt(opts.radius * opts.radius * 2.0) * 10000.0
-  );
-  geo.addAttribute('vindex', new BufferAttribute(buffers.vindex, 1))
-  geo.addAttribute('shape', new InstancedBufferAttribute(buffers.shape, 4))
-  geo.addAttribute('offset', new InstancedBufferAttribute(buffers.offset, 4))
-  geo.setIndex(new BufferAttribute(buffers.index, 1))
+  geo.boundingSphere = new THREE.Sphere(
+    new THREE.Vector3(0, 0, 0), Math.sqrt(opts.radius * opts.radius * 2.0) * 10000.0
+  )
+  geo.addAttribute('vindex', new THREE.BufferAttribute(buffers.vindex, 1))
+  geo.addAttribute('shape', new THREE.InstancedBufferAttribute(buffers.shape, 4))
+  geo.addAttribute('offset', new THREE.InstancedBufferAttribute(buffers.offset, 4))
+  geo.setIndex(new THREE.BufferAttribute(buffers.index, 1))
 
-  const tex = opts.texture;
-  tex.wrapS = tex.wrapT = RepeatWrapping;
-  const htex = opts.heightMap;
-  htex.wrapS = htex.wrapT = RepeatWrapping;
-  const hscale = opts.heightMapScale;
+  const tex = opts.texture
+  tex.wrapS = tex.wrapT = THREE.RepeatWrapping
+  const htex = opts.heightMap
+  htex.wrapS = htex.wrapT = THREE.RepeatWrapping
+  const hscale = opts.heightMapScale
 
-  const lightDir = Vec3.clone(opts.lightDir);
-  lightDir.z *= 0.5;
-  Vec3.normalize(lightDir, lightDir);
+  const lightDir = Vec3.clone(opts.lightDir)
+  lightDir.z *= 0.5
+  Vec3.normalize(lightDir, lightDir)
 
   // Fill in some constants that never change between draw calls
   const vertScript = opts.vertScript.replace(
@@ -89,7 +77,7 @@ export function createMesh(opts) {
   )
 
   // Setup shader
-  const mat = new RawShaderMaterial({
+  const mat = new THREE.RawShaderMaterial({
     uniforms: {
       lightDir: {
         type: '3f',
@@ -148,9 +136,9 @@ export function createMesh(opts) {
     fragmentShader: opts.fragScript,
     transparent: true
   })
-  const mesh = new Mesh(geo, mat)
-  mesh.frustumCulled = false; // always draw, never cull
-  return mesh;
+  const mesh = new THREE.Mesh(geo, mat)
+  mesh.frustumCulled = false // always draw, never cull
+  return mesh
 }
 
 /**
@@ -161,7 +149,7 @@ export function createMesh(opts) {
  * @param i index offset
  */
 function initBladeIndices(id, vc1, vc2, i) {
-  let seg;
+  let seg
   // blade front side
   for (seg = 0; seg < BLADE_SEGS; ++seg) {
     id[i++] = vc1 + 0 // tri 1
@@ -185,8 +173,8 @@ function initBladeIndices(id, vc1, vc2, i) {
 }
 
 /** Set up shape variations for each blade of grass */
-function initBladeShapeVerts(shape: Float32Array, numBlades: number, offset: Float32Array) {
-  let noise = 0
+function initBladeShapeVerts(shape, numBlades, offset) {
+  let noise = 0;
   for (let i = 0; i < numBlades; ++i) {
     noise = Math.abs(simplex(offset[i * 4 + 0] * 0.03, offset[i * 4 + 1] * 0.03))
     noise = noise * noise * noise
@@ -200,7 +188,7 @@ function initBladeShapeVerts(shape: Float32Array, numBlades: number, offset: Flo
 }
 
 /** Set up positons & rotation for each blade of grass */
-function initBladeOffsetVerts(offset: Float32Array, numBlades: number, patchRadius: number) {
+function initBladeOffsetVerts(offset, numBlades, patchRadius) {
   for (let i = 0; i < numBlades; ++i) {
     offset[i * 4 + 0] = nrand() * patchRadius // x
     offset[i * 4 + 1] = nrand() * patchRadius // y
@@ -210,7 +198,7 @@ function initBladeOffsetVerts(offset: Float32Array, numBlades: number, patchRadi
 }
 
 /** Set up indices for 1 blade */
-function initBladeIndexVerts(vindex: Float32Array) {
+function initBladeIndexVerts(vindex) {
   for (let i = 0; i < vindex.length; ++i) {
     vindex[i] = i
   }
@@ -224,10 +212,10 @@ function initBladeIndexVerts(vindex: Float32Array) {
  * @param y Y coord
  */
 export function update(
-  mesh: THREE.Mesh, time: number,
-  camPos: Vec3, camDir: Vec3, drawPos: Vec2
+  mesh, time,
+  camPos, camDir, drawPos
 ) {
-  const mat = mesh.material as THREE.RawShaderMaterial
+  const mat = mesh.material
   mat.uniforms['time'].value = time
   let p = mat.uniforms['camDir'].value
   p[0] = camDir.x
@@ -237,4 +225,3 @@ export function update(
   p[0] = drawPos.x
   p[1] = drawPos.y
 }
-
