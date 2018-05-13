@@ -23,8 +23,8 @@ export default {
       loading: 0,
       loaded: false,
       world: null,
-      numGrassBlades: 40000,
-      grassPatchRadius: 80,
+      numGrassBlades: 10000,
+      grassPatchRadius: 40,
       width: 640,
       height: 480,
       antialias: false
@@ -97,9 +97,9 @@ export default {
       this.assets = loader.getAssets();
       // console.log(this.assets.getAssets())
       // Select a config roughly based on device type
-      const cfgId = browser.isMobile.any ? "mobile" : "desktop";
-      const cfg = CONFIGS[cfgId];
-      console.log(cfg);
+      this.cfgId = browser.isMobile.any ? "mobile" : "desktop";
+      this.cfg = CONFIGS[this.cfgId];
+      console.log(this.cfgId, this.cfg);
     },
     onAssetsLoaded(a) {
       let assets = a;
