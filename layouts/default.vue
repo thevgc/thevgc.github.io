@@ -3,6 +3,8 @@
     <app-background></app-background>
     <div id="app-foreground">
       <app-stage>
+				<div id="notification" style="display:none"><div id="notification_text"></div></div>
+				<div id="logger" style="display:none">logger</div>
         <nuxt/>
       </app-stage>
       <app-drawer>

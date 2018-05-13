@@ -256,7 +256,7 @@ export function World(assets,
   resize(displayWidth, displayHeight);
 
   // toggle logger on ` press
-  input.setKeyPressListener(192, () => {
+  input.setKeyPressListener(223, () => {
     logger.toggle();
   });
 
