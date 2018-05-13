@@ -1,13 +1,9 @@
 'use strict';
-// export const Assets = {
-//   images: {},
-//   text: {},
-//   textures: {}
-// }
-import { TextureLoader } from 'three';
-/**
- * Create a Loader instance
- */
+
+import {
+  TextureLoader
+} from 'three';
+
 export function Loader() {
 
   let isLoading = false;
@@ -127,4 +123,3 @@ export function Loader() {
   };
 
 } // end Loader
-

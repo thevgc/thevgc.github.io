@@ -1,7 +1,7 @@
 'use strict';
 
 export default {
-	mobile: {
+  mobile: {
     blades: 20000,
     depth: 50.0,
     antialias: false
@@ -26,5 +26,4 @@ export default {
     depth: 175.0,
     antialias: true
   }
-
-}
+};

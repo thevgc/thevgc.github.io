@@ -3,7 +3,7 @@ import * as THREE from 'three';
 export default function create(
   tex, radius, lats = 16, lngs = 32
 ) {
-  tex.wrapS = tex.wrapT = THREE.RepeatWrapping
+  tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
   return new THREE.Mesh(
     new THREE.SphereGeometry(
       radius, lngs, lats, 0, Math.PI * 2.0, 0, Math.PI / 2.0
@@ -15,5 +15,5 @@ export default function create(
       map: tex,
       fog: false
     })
-  )
+  );
 }

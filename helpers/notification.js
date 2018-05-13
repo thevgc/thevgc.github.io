@@ -2,24 +2,24 @@
 
 import {
   $e
-} from './util'
-import * as anim from './anim'
+} from '@/helpers/util';
+import * as anim from '@/helpers/anim';
 
-let notifying = false
+let notifying = false;
 
 export default function notify(msg) {
-  const elTxt = $e('notification_text')
-  elTxt.textContent = msg
-  if (notifying) return
-  const el = $e('notification')
-  el.style.display = 'block'
-  el.style.opacity = '1.0'
-  notifying = true
+  const elTxt = $e('notification_text');
+  elTxt.textContent = msg;
+  if (notifying) return;
+  const el = $e('notification');
+  el.style.display = 'block';
+  el.style.opacity = '1.0';
+  notifying = true;
   setTimeout(function () {
     anim.fadeOut(el, 1000, function () {
-      el.style.display = 'none'
-      elTxt.textContent = ''
-      notifying = false
-    })
-  }, 4000)
+      el.style.display = 'none';
+      elTxt.textContent = '';
+      notifying = false;
+    });
+  }, 4000);
 }

@@ -2,7 +2,7 @@
 
 export default {
   isMobile() {
-    if(navigator) {
+    if (navigator) {
       const a = !!navigator.userAgent.match(/Android/i);
       const bb = !!navigator.userAgent.match(/BlackBerry/i);
       const ios = !!navigator.userAgent.match(/iPhone|iPad|iPod/i);
@@ -21,20 +21,18 @@ export default {
       };
     }
   },
-  isStandalone () {
+  isStandalone() {
 
     // iOS
     if (navigator && navigator.standalone !== undefined)
       return !!navigator.standalone;
     // Windows Mobile
-    if (window && window.external && window.external.msIsSiteMode)
-
+    if (window && window.external && window.external.msIsSiteMode) {
       return !!window.external.msIsSiteMode();
+    }
     // Chrome
-    if (window && window.matchMedia)
+    if (window && window.matchMedia) {
       return window.matchMedia('(display-mode: standalone)').matches;
+    }
   }
-
-
-
-}
+};

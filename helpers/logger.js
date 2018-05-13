@@ -2,7 +2,7 @@
 
 import {
   $e
-} from './util';
+} from '@/helpers/util';
 
 let visible = false;
 

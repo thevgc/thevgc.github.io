@@ -293,7 +293,7 @@ const _hi = {
   t: 0,
   z: 0.0,
   n: Vec3.create()
-}
+};
 
 
 /**

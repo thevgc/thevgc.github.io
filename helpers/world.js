@@ -2,10 +2,10 @@
 
 import {
   $e
-} from './util'
+} from './util';
 import {
   difAngle
-} from './gmath'
+} from './gmath';
 import {
   Vec2,
   Vec3,
@@ -21,12 +21,12 @@ import * as heightfield from '@/helpers/heightfield';
 // type Heightfield = heightfield.Heightfield
 import * as grass from '@/helpers/grass';
 import * as terrain from '@/helpers/terrain';
-import * as terramap from '@/helpers/terramap'
-import * as water from '@/helpers/water'
-import Player from '@/helpers/player'
+import * as terramap from '@/helpers/terramap';
+import * as water from '@/helpers/water';
+import Player from '@/helpers/player';
 import {
   FPSMonitor
-} from '@/helpers/fps'
+} from '@/helpers/fps';
 import * as THREE from 'three';
 const VIEW_DEPTH = 2000.0;
 
@@ -55,7 +55,7 @@ const GLARE_YAW = Math.PI * 1.5; // yaw angle when looking directly at sun
 const GLARE_PITCH = 0.2; // pitch angle looking at sun
 const GLARE_COLOR = Color.create(1.0, 0.8, 0.4);
 
-const INTRO_FADE_DUR = 2000;
+const INTRO_FADE_DUR = 1000;
 
 // export interface IWorld {
 //   doFrame(): void
@@ -90,17 +90,17 @@ export function World(assets,
     clearColor: 0xFFFFFF,
     clearAlpha: 1,
     alpha: true
-  })
+  });
   if (!renderer) {
-    throw new Error("Failed to create THREE.WebGLRenderer")
+    throw new Error('Failed to create WebGL Renderer');
   }
 
   // // Setup some render values based on provided configs
-  const fogDist = grassPatchRadius * 20.0
-  const grassFogDist = grassPatchRadius * 2.0
+  const fogDist = grassPatchRadius * 20.0;
+  const grassFogDist = grassPatchRadius * 2.0;
   const camera = new THREE.PerspectiveCamera(
     45, displayWidth / displayHeight, 1.0, VIEW_DEPTH
-  )
+  );
   const meshes = {
     terrain: null,
     grass: null,
@@ -108,15 +108,15 @@ export function World(assets,
     water: null,
     sunFlare: null,
     fade: null
-  }
+  };
   // as any
 
-  const scene = new THREE.Scene()
+  const scene = new THREE.Scene();
   scene.fog = new THREE.Fog(Color.to24bit(FOG_COLOR), 0.1, fogDist);
 
   // // Setup the camera so Z is up.
   // // Then we have cartesian X,Y coordinates along ground plane.
-  camera.rotation.order = "ZXY";
+  camera.rotation.order = 'ZXY';
   camera.rotation.x = Math.PI * 0.5;
   camera.rotation.y = Math.PI * 0.5;
   camera.rotation.z = Math.PI;
@@ -124,37 +124,37 @@ export function World(assets,
 
   // // Put camera in an object so we can transform it normally
   const camHolder = new THREE.Object3D();
-  camHolder.rotation.order = "ZYX";
+  camHolder.rotation.order = 'ZYX';
   camHolder.add(camera);
 
   scene.add(camHolder);
 
   // Setup heightfield
-  let hfImg = assets.images['heightmap']
-  const hfCellSize = HEIGHTFIELD_SIZE / hfImg.width
+  let hfImg = assets.images.heightmap;
+  const hfCellSize = HEIGHTFIELD_SIZE / hfImg.width;
   const heightMapScale = Vec3.create(
     1.0 / HEIGHTFIELD_SIZE,
     1.0 / HEIGHTFIELD_SIZE,
     HEIGHTFIELD_HEIGHT
-  )
+  );
   const heightField = heightfield.create({
     cellSize: hfCellSize,
     minHeight: 0.0,
     maxHeight: heightMapScale.z,
     image: hfImg
-  })
-  hfImg = undefined
+  });
+  hfImg = undefined;
 
-  const terraMap = terramap.createTexture(heightField, LIGHT_DIR, assets.images['noise'])
+  const terraMap = terramap.createTexture(heightField, LIGHT_DIR, assets.images.noise);
 
-  let windIntensity = WIND_DEFAULT
+  let windIntensity = WIND_DEFAULT;
 
   // Create a large patch of grass to fill the foreground
   meshes.grass = grass.createMesh({
     lightDir: LIGHT_DIR,
     numBlades: numGrassBlades,
     radius: grassPatchRadius,
-    texture: assets.textures['grass'],
+    texture: assets.textures.grass,
     vertScript: assets.text['grass.vert'],
     fragScript: assets.text['grass.frag'],
     heightMap: terraMap,
@@ -166,14 +166,14 @@ export function World(assets,
     transitionLow: BEACH_TRANSITION_LOW,
     transitionHigh: BEACH_TRANSITION_HIGH,
     windIntensity: windIntensity
-  })
+  });
   // Set a specific render order - don't let three.js sort things for us.
-  meshes.grass.renderOrder = 10
-  scene.add(meshes.grass)
+  meshes.grass.renderOrder = 10;
+  scene.add(meshes.grass);
 
   // Terrain mesh
   const terra = terrain.create({
-    textures: [assets.textures['terrain1'], assets.textures['terrain2']],
+    textures: [assets.textures.terrain1, assets.textures.terrain2],
     vertScript: assets.text['terrain.vert'],
     fragScript: assets.text['terrain.frag'],
     heightMap: terraMap,
@@ -183,19 +183,19 @@ export function World(assets,
     grassFogFar: grassFogDist,
     transitionLow: BEACH_TRANSITION_LOW,
     transitionHigh: BEACH_TRANSITION_HIGH
-  })
-  meshes.terrain = terra.mesh
-  meshes.terrain.renderOrder = 20
-  scene.add(meshes.terrain)
+  });
+  meshes.terrain = terra.mesh;
+  meshes.terrain.renderOrder = 20;
+  scene.add(meshes.terrain);
 
   // Skydome
-  meshes.sky = createSkyDome(assets.textures['skydome'], VIEW_DEPTH * 0.95)
-  meshes.sky.renderOrder = 30
-  scene.add(meshes.sky)
-  meshes.sky.position.z = -25.0
+  meshes.sky = createSkyDome(assets.textures.skydome, VIEW_DEPTH * 0.95);
+  meshes.sky.renderOrder = 30;
+  scene.add(meshes.sky);
+  meshes.sky.position.z = -25.0;
 
   meshes.water = water.createMesh({
-    envMap: assets.textures['skyenv'],
+    envMap: assets.textures.skyenv,
     vertScript: assets.text['water.vert'],
     fragScript: assets.text['water.frag'],
     waterLevel: WATER_LEVEL,
@@ -203,10 +203,10 @@ export function World(assets,
     fogColor: FOG_COLOR,
     fogNear: 1.0,
     fogFar: fogDist
-  })
-  meshes.water.renderOrder = 40
-  scene.add(meshes.water)
-  meshes.water.position.z = WATER_LEVEL
+  });
+  meshes.water.renderOrder = 40;
+  scene.add(meshes.water);
+  meshes.water.position.z = WATER_LEVEL;
 
   // White plane to cover screen for fullscreen fade-in from white
   meshes.fade = new THREE.Mesh(
@@ -219,7 +219,7 @@ export function World(assets,
       depthTest: false,
       depthWrite: false
     })
-  )
+  );
   meshes.fade.position.x = 2.0; // place directly in front of camera
   meshes.fade.rotation.y = Math.PI * 1.5;
   meshes.fade.renderOrder = 10;
@@ -239,45 +239,45 @@ export function World(assets,
       depthWrite: false,
       blending: THREE.AdditiveBlending
     })
-  )
-  meshes.sunFlare.position.x = 2.05
-  meshes.sunFlare.rotation.y = Math.PI * 1.5
-  meshes.sunFlare.visible = false
-  meshes.sunFlare.renderOrder = 20
-  camHolder.add(meshes.sunFlare)
+  );
+  meshes.sunFlare.position.x = 2.05;
+  meshes.sunFlare.rotation.y = Math.PI * 1.5;
+  meshes.sunFlare.visible = false;
+  meshes.sunFlare.renderOrder = 20;
+  camHolder.add(meshes.sunFlare);
 
   // Create a Player instance
-  const player = Player(heightField, WATER_LEVEL)
+  const player = new Player(heightField, WATER_LEVEL);
 
   // For timing
-  let prevT = Date.now() // prev frame time (ms)
-  let simT = 0 // total running time (ms)
+  let prevT = Date.now(); // prev frame time (ms)
+  let simT = 0; // total running time (ms)
 
-  resize(displayWidth, displayHeight)
+  resize(displayWidth, displayHeight);
 
   // toggle logger on ` press
   input.setKeyPressListener(192, () => {
-    logger.toggle()
-  })
+    logger.toggle();
+  });
 
   input.setKeyPressListener('O'.charCodeAt(0), () => {
-    player.state.pos.x = 0
-    player.state.pos.y = 0
-  })
+    player.state.pos.x = 0;
+    player.state.pos.y = 0;
+  });
 
   input.setKeyPressListener('F'.charCodeAt(0), () => {
-    windIntensity = Math.max(windIntensity - 0.1, 0)
-    const mat = meshes.grass.material
+    windIntensity = Math.max(windIntensity - 0.1, 0);
+    const mat = meshes.grass.material;
 
-    mat.uniforms['windIntensity'].value = windIntensity
-  })
+    mat.uniforms.windIntensity.value = windIntensity;
+  });
   input.setKeyPressListener('G'.charCodeAt(0), () => {
-    windIntensity = Math.min(windIntensity + 0.1, WIND_MAX)
-    const mat = meshes.grass.material
-    mat.uniforms['windIntensity'].value = windIntensity
-  })
+    windIntensity = Math.min(windIntensity + 0.1, WIND_MAX);
+    const mat = meshes.grass.material;
+    mat.uniforms.windIntensity.value = windIntensity;
+  });
 
-  const fpsMon = FPSMonitor()
+  const fpsMon = new FPSMonitor();
 
   // ///////////////////////////////////////////////////////////////////
   // // Public World instance methods
@@ -286,30 +286,30 @@ export function World(assets,
    * Call every frame
    */
   function doFrame() {
-    const curT = Date.now()
-    let dt = curT - prevT
-    fpsMon.update(dt)
+    const curT = Date.now();
+    let dt = curT - prevT;
+    fpsMon.update(dt);
 
     if (dt > 0) {
       // only do computations if time elapsed
       if (dt > MAX_TIMESTEP) {
         // don't exceed max timestep
-        dt = MAX_TIMESTEP
-        prevT = curT - MAX_TIMESTEP
+        dt = MAX_TIMESTEP;
+        prevT = curT - MAX_TIMESTEP;
       }
       // update sim
-      update(dt)
+      update(dt);
       // render it
-      render()
+      render();
       // remember prev frame time
-      prevT = curT
+      prevT = curT;
     }
   }
 
   /** Handle window resize events */
   function resize(w, h) {
-    let displayWidth = w
-    let displayHeight = h
+    let displayWidth = w;
+    let displayHeight = h;
     renderer.setSize(displayWidth, displayHeight);
     camera.aspect = displayWidth / displayHeight;
     camera.updateProjectionMatrix();
@@ -323,9 +323,9 @@ export function World(assets,
     t: 0,
     z: 0.0,
     n: Vec3.create()
-  }
+  };
 
-  const _v = Vec2.create(0.0, 0.0)
+  const _v = Vec2.create(0.0, 0.0);
 
   /**
    * Logic update
@@ -333,97 +333,97 @@ export function World(assets,
   function update(dt) {
     // Intro fade from white
     if (simT < INTRO_FADE_DUR) {
-      updateFade(dt)
+      updateFade(dt);
     }
 
-    simT += dt
-    const t = simT * 0.001
+    simT += dt;
+    const t = simT * 0.001;
 
     // Move player (viewer)
-    player.update(dt)
-    const ppos = player.state.pos
-    const pdir = player.state.dir
-    const pyaw = player.state.yaw
-    const ppitch = player.state.pitch
-    const proll = player.state.roll
+    player.update(dt);
+    const ppos = player.state.pos;
+    const pdir = player.state.dir;
+    const pyaw = player.state.yaw;
+    const ppitch = player.state.pitch;
+    const proll = player.state.roll;
 
-    heightfield.infoAt(heightField, ppos.x, ppos.y, true, _hinfo)
-    const groundHeight = _hinfo.z
+    heightfield.infoAt(heightField, ppos.x, ppos.y, true, _hinfo);
+    const groundHeight = _hinfo.z;
 
     if (logger.isVisible()) {
-      logger.setText(
-        "x:" + ppos.x.toFixed(4) +
-        " y:" + ppos.y.toFixed(4) +
-        " z:" + ppos.z.toFixed(4) +
-        " dx:" + pdir.x.toFixed(4) +
-        " dy:" + pdir.y.toFixed(4) +
-        " dz:" + pdir.z.toFixed(4) +
-        " height:" + groundHeight.toFixed(4) +
-        " i:" + _hinfo.i +
-        " fps:" + fpsMon.fps()
-      )
+      logger.setText(`
+        x: ${ppos.x.toFixed(4)},
+        y: ${ppos.y.toFixed(4)},
+        z: ${ppos.z.toFixed(4)},
+        dx: ${pdir.x.toFixed(4)},
+        dy: ${pdir.y.toFixed(4)},
+        dz: ${pdir.z.toFixed(4)},
+        height: ${groundHeight.toFixed(4)},
+        i: ${_hinfo.i},
+        fps: ${fpsMon.fps()}
+      `);
     }
 
     // Move skydome with player
-    meshes.sky.position.x = ppos.x
-    meshes.sky.position.y = ppos.y
+    meshes.sky.position.x = ppos.x;
+    meshes.sky.position.y = ppos.y;
 
     // Update grass.
     // Here we specify the centre position of the square patch to
     // be drawn. That would be directly in front of the camera, the
     // distance from centre to edge of the patch.
-    const drawPos = _v
+    const drawPos = _v;
     Vec2.set(drawPos,
       ppos.x + Math.cos(pyaw) * grassPatchRadius,
       ppos.y + Math.sin(pyaw) * grassPatchRadius
-    )
-    grass.update(meshes.grass, t, ppos, pdir, drawPos)
+    );
+    grass.update(meshes.grass, t, ppos, pdir, drawPos);
 
-    terrain.update(terra, ppos.x, ppos.y)
+    terrain.update(terra, ppos.x, ppos.y);
 
-    water.update(meshes.water, ppos)
+    water.update(meshes.water, ppos);
 
     // Update camera location/orientation
-    Vec3.copy(ppos, camHolder.position)
+    Vec3.copy(ppos, camHolder.position);
     //camHolder.position.z = ppos.z + groundHeight
-    camHolder.rotation.z = pyaw
+    camHolder.rotation.z = pyaw;
     // Player considers 'up' pitch positive, but cam pitch (about Y) is reversed
-    camHolder.rotation.y = -ppitch
-    camHolder.rotation.x = proll
+    camHolder.rotation.y = -ppitch;
+    camHolder.rotation.x = proll;
 
     // Update sun glare effect
-    updateGlare()
+    updateGlare();
   }
 
   /** Update how much glare effect by how much we're looking at the sun */
   function updateGlare() {
-    const dy = Math.abs(difAngle(GLARE_YAW, player.state.yaw))
-    const dp = Math.abs(difAngle(GLARE_PITCH, player.state.pitch)) * 1.75
-    const sunVisAngle = Math.sqrt(dy * dy + dp * dp)
+    const dy = Math.abs(difAngle(GLARE_YAW, player.state.yaw));
+    const dp = Math.abs(difAngle(GLARE_PITCH, player.state.pitch)) * 1.75;
+    const sunVisAngle = Math.sqrt(dy * dy + dp * dp);
     if (sunVisAngle < GLARE_RANGE) {
       const glare = MAX_GLARE * Math.pow((GLARE_RANGE - sunVisAngle) / (1.0 + MAX_GLARE), 0.75);
-      (meshes.sunFlare.material).opacity = Math.max(0.0, glare)
-      meshes.sunFlare.visible = true
+      (meshes.sunFlare.material).opacity = Math.max(0.0, glare);
+      meshes.sunFlare.visible = true;
     } else {
-      meshes.sunFlare.visible = false
+      meshes.sunFlare.visible = false;
     }
   }
 
   /** Update intro fullscreen fade from white */
   function updateFade(dt) {
-    const mat = meshes.fade.material
+    const mat = meshes.fade.material;
     if (simT + dt >= INTRO_FADE_DUR) {
       // fade is complete - hide cover
-      mat.opacity = 0.0
-      meshes.fade.visible = false
+      mat.opacity = 0.0;
+      meshes.fade.visible = false;
     } else {
       // update fade opacity
-      mat.opacity = 1.0 - Math.pow(simT / INTRO_FADE_DUR, 2.0)
+      mat.opacity = 1.0 - Math.pow(simT / INTRO_FADE_DUR, 2.0);
     }
   }
 
   function render() {
-    renderer.render(scene, camera)
+    renderer.render(scene, camera);
   }
 
   ///////////////////////////////////////////////////////////////////
@@ -431,5 +431,5 @@ export function World(assets,
   return {
     doFrame,
     resize
-  }
+  };
 }
