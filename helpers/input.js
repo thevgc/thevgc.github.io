@@ -42,6 +42,8 @@ function onKeyDown(ev) {
     setState(ev.keyCode, 1.0);
     keyStates[ev.keyCode] = true;
     const codeStr = ev.keyCode.toString();
+    console.log(keyPressListeners[codeStr])
+
     if (typeof keyPressListeners[codeStr] === 'function') {
       keyPressListeners[codeStr]();
     }
@@ -49,6 +51,7 @@ function onKeyDown(ev) {
 }
 
 function onKeyUp(ev) {
+  console.log('Key Up', ev)
   if (keyStates[ev.keyCode]) {
     keyStates[ev.keyCode] = false;
     setState(ev.keyCode, 0.0);
@@ -58,6 +61,7 @@ function onKeyUp(ev) {
 let initialized = false;
 
 export function init() {
+  console.log('Input Initializing');
   if (initialized) return;
   document.addEventListener('keydown', onKeyDown, true);
   document.addEventListener('keyup', onKeyUp, true);
@@ -70,4 +74,5 @@ export function getKeyState(code) {
 
 export function setKeyPressListener(code, fn) {
   keyPressListeners[code.toString()] = fn;
+  console.log(keyPressListeners)
 }

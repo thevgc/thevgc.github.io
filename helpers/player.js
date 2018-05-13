@@ -49,7 +49,7 @@ const NUM_MODES = 3;
 export default function Player(heightField, waterHeight) {
 
   //let autoplay = true
-  let mode = MODE_AUTO;
+  let mode = MODE_MAN;
   let curT = 0;
 
   const state = {
@@ -66,6 +66,7 @@ export default function Player(heightField, waterHeight) {
   };
 
   input.setKeyPressListener(13, function () {
+    console.log('Hit');
     nextMode();
     if (mode === MODE_AUTO) {
       log.hide();
