@@ -1,7 +1,5 @@
 <template>
-  <div class="container">
-    <h1>Leagues</h1>
-  </div>
+  <h1>Leagues</h1>
 </template>
 
 <script>
