@@ -133,11 +133,6 @@ module.exports = {
       isDev,
       isClient
     }) {
-      config.module.rules.push({
-        test: /\.(glsl)$/,
-        loader: 'file-loader',
-        exclude: /(node_modules)/
-      });
       if (isClient) {
         config.devtool = 'source-map';
       }
@@ -146,11 +141,6 @@ module.exports = {
           enforce: 'pre',
           test: /\.(js|vue)$/,
           loader: 'eslint-loader',
-          exclude: /(node_modules)/
-        });
-        config.module.rules.push({
-          test: /\.(glsl)$/,
-          loader: 'file-loader',
           exclude: /(node_modules)/
         });
       }
