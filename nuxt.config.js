@@ -74,10 +74,7 @@ module.exports = {
       }
     ],
     [
-      '@nuxtjs/pwa', {
-        icon: false,
-        workbox: false
-      }
+      '@nuxtjs/pwa', {}
     ],
     // '@nuxtjs/onesignal',
     '@nuxtjs/font-awesome',
@@ -108,17 +105,17 @@ module.exports = {
     },
     cdn: true
   },
-  workbox: {
-
-  },
   manifest: {
     name: 'The Virtual Gaming Community',
     short_name: 'The VGC',
     lang: 'en-GB',
-    display: 'browser',
+    display: 'fullscreen',
     dir: 'ltr',
     orientation: 'landscape-primary',
     start_url: '/',
+  },
+  icon: {
+    iconSrc: 'static/icon.png'
   },
   build: {
     extractCSS: true,
